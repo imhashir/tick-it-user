@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.hznhta.tickit_user.Fragments.HomeFragment;
+import com.hznhta.tickit_user.Fragments.RequestCreditFragment;
 import com.hznhta.tickit_user.R;
 
 import butterknife.BindView;
@@ -89,6 +90,7 @@ public class NavViewActivity extends BaseActivity implements NavigationView.OnNa
                 setFragmentView(HomeFragment.newInstance());
                 break;
             case R.id.menu_credit_reqs:
+                setFragmentView(RequestCreditFragment.newInstance());
                 break;
             case R.id.menu_logout:
                 FirebaseAuth.getInstance().signOut();

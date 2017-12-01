@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.TicketListActivity"/>
+        <activity android:name=".Activities.RequestCreditActivity"
+                  android:label="@string/activity_label_request_credit"/>
     </application>
 
 </manifest>
