@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hznhta.tickit_user.Activities.BuyTicketActivity;
 import com.hznhta.tickit_user.Controllers.TicketController;
 import com.hznhta.tickit_user.Models.Ticket;
 import com.hznhta.tickit_user.R;
@@ -111,7 +112,7 @@ public class TicketListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-
+            startActivity(BuyTicketActivity.newIntent(getActivity(), mTicket, mType));
         }
     }
 }

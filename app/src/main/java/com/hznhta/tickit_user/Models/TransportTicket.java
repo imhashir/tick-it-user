@@ -2,8 +2,7 @@ package com.hznhta.tickit_user.Models;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hznhta.tickit_user.R;
 
@@ -15,10 +14,9 @@ public class TransportTicket extends Ticket {
 
     private static final String TAG = "TransportTicket";
 
-    private static EditText sSource;
-    private static EditText sDestination;
-    private static EditText sArrivalTime;
-    private static Button sAddButton;
+    private static TextView sSource;
+    private static TextView sDestination;
+    private static TextView sArrivalTime;
 
     public TransportTicket() {
         super();
@@ -33,20 +31,17 @@ public class TransportTicket extends Ticket {
     }
 
     public static void populateTicket(TransportTicket ticket) {
-        populateTicketView(ticket);
         sSource.setText(ticket.getSource() + "");
         sDestination.setText(ticket.getDestination() + "");
         sArrivalTime.setText(ticket.getArrivalTime() + "");
-        sAddButton.setText("Update");
     }
 
-    public static View getView(final Context context) {
+    public static View getView(Context context) {
         View v = getTicketView(context, TRANSPORT_TICKET);
 
         sSource = v.findViewById(R.id.id_input_source);
         sDestination = v.findViewById(R.id.id_input_dest);
         sArrivalTime = v.findViewById(R.id.id_input_arrival_time);
-        sAddButton = v.findViewById(R.id.id_add_ticket_button);
 
         return v;
     }

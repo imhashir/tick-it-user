@@ -48,14 +48,6 @@ public abstract class Ticket implements Serializable{
         this.dateTime = dateTime;
     }
 
-    protected static void populateTicketView(Ticket ticket) {
-        sTicketName.setText(ticket.getName());
-        sTicketSeats.setText(ticket.getSeats() + "");
-        sTicketPrice.setText(ticket.getPrice() + "");
-        sTicketPlace.setText(ticket.getPlace() + "");
-        sTicketDate.setText(ticket.getDateTime() + "");
-    }
-
     protected static View getTicketView(Context context, int type) {
         int layoutId = R.layout.fragment_ticket_movie;
         switch (type) {
@@ -73,20 +65,7 @@ public abstract class Ticket implements Serializable{
                 break;
         }
         View v = LayoutInflater.from(context).inflate(layoutId, null, false);
-        sTicketName = v.findViewById(R.id.id_input_name);
-        sTicketDate = v.findViewById(R.id.id_input_date);
-        sTicketPlace = v.findViewById(R.id.id_input_place);
-        sTicketPrice = v.findViewById(R.id.id_input_price);
-        sTicketSeats = v.findViewById(R.id.id_input_seats);
         return v;
-    }
-
-    public static void clearParentFields() {
-        sTicketName.setText("");
-        sTicketDate.setText("");
-        sTicketPlace.setText("");
-        sTicketPrice.setText("");
-        sTicketSeats.setText("");
     }
 
     public String getUid() {

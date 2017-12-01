@@ -2,8 +2,7 @@ package com.hznhta.tickit_user.Models;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hznhta.tickit_user.R;
 
@@ -14,9 +13,8 @@ public class MovieTicket extends Ticket {
     private String genre;
     private int length;
 
-    private static EditText sMovieGenre;
-    private static EditText sMovieLength;
-    private static Button sAddButton;
+    private static TextView sMovieGenre;
+    private static TextView sMovieLength;
 
     public MovieTicket() {
         super();
@@ -31,10 +29,8 @@ public class MovieTicket extends Ticket {
     }
 
     public static void populateTicket(MovieTicket ticket) {
-        populateTicketView(ticket);
         sMovieGenre.setText(ticket.getGenre() + "");
         sMovieLength.setText(ticket.getLength() + "");
-        sAddButton.setText("Update");
     }
 
     public static View getView(final Context context) {
@@ -42,7 +38,6 @@ public class MovieTicket extends Ticket {
 
         sMovieGenre = v.findViewById(R.id.id_input_genre);
         sMovieLength = v.findViewById(R.id.id_input_length);
-        sAddButton = v.findViewById(R.id.id_add_ticket_button);
 
         return v;
     }

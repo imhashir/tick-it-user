@@ -24,6 +24,7 @@
         <activity android:name=".Activities.TicketListActivity"/>
         <activity android:name=".Activities.RequestCreditActivity"
                   android:label="@string/activity_label_request_credit"/>
+        <activity android:name=".Activities.BuyTicketActivity"/>
     </application>
 
 </manifest>
