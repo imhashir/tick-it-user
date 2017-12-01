@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,17 +78,22 @@ public class TicketController {
         });
     }
 
-    public void buyTicket(final Buy buy, final Ticket ticket, final String type, OnActionCompletedListener listener) {
+    public void buyTicket(final Buy buy, final Ticket ticket, final int type, OnActionCompletedListener listener) {
         mOnActionCompletedListener = listener;
         FirebaseDatabase.getInstance().getReference("buy").push().setValue(buy).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
-                    FirebaseDatabase.getInstance().getReference("tickets").child(type).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference("tickets").child(types[type]).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                mOnActionCompletedListener.onActionSucceed();
+                                FirebaseDatabase.getInstance().getReference("userTickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ticket.getUid()).setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        mOnActionCompletedListener.onActionSucceed();
+                                    }
+                                });
                             } else {
                                 mOnActionCompletedListener.onActionFailed(task.getException().toString());
                             }

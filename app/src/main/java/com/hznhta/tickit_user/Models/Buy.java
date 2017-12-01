@@ -5,24 +5,14 @@ package com.hznhta.tickit_user.Models;
  */
 
 public class Buy {
-    private String mId;
     private String mEmail;
     private String mTicketId;
     private int mCount;
 
-    public void setId(String id) {
-        this.mId = id;
-    }
-
-    public Buy(String id, String email, String ticketId, int count) {
-        mId = id;
+    public Buy(String email, String ticketId, int count) {
         mEmail = email;
         mTicketId = ticketId;
         mCount = count;
-    }
-
-    public String getId() {
-        return mId;
     }
 
     public String getEmail() {

@@ -3,6 +3,7 @@ package com.hznhta.tickit_user.Fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,6 +14,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.hznhta.tickit_user.Controllers.TicketController;
+import com.hznhta.tickit_user.Interfaces.OnActionCompletedListener;
+import com.hznhta.tickit_user.Models.Buy;
 import com.hznhta.tickit_user.Models.MovieTicket;
 import com.hznhta.tickit_user.Models.ShowTicket;
 import com.hznhta.tickit_user.Models.SportsTicket;
@@ -40,6 +45,8 @@ public class BuyTicketFragment extends Fragment {
     @BindView(R.id.id_input_place)
     TextView mTicketPlace;
 
+    private TicketController mTicketController;
+
     private static final String KEY_TICKET = "BuyTicketFragment.ticket";
     private static final String KEY_TYPE = "BuyTicketFragment.type";
     private Ticket mTicket;
@@ -56,6 +63,12 @@ public class BuyTicketFragment extends Fragment {
         BuyTicketFragment fragment = new BuyTicketFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTicketController = new TicketController();
     }
 
     @Nullable
@@ -91,6 +104,29 @@ public class BuyTicketFragment extends Fragment {
                     TransportTicket.populateTicket((TransportTicket) mTicket);
                     break;
             }
+
+            mBuyTicketButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int quantity = Integer.parseInt(mTicketQuantity.getText().toString());
+                    if(quantity <= mTicket.getSeats()) {
+                        Buy buy = new Buy(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mTicket.getUid(), quantity);
+                        mTicketController.buyTicket(buy, mTicket, mType, new OnActionCompletedListener() {
+                            @Override
+                            public void onActionSucceed() {
+                                Snackbar.make(BuyTicketFragment.this.getView(), "Ticket Bought!", Snackbar.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onActionFailed(String err) {
+
+                            }
+                        });
+                    } else {
+                        mTicketQuantity.setError("Not enough Tickets available!");
+                    }
+                }
+            });
         }
 
         return v;
