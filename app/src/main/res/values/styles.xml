@@ -8,4 +8,35 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ButtonStyle">
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="ButtonStyleGreen" parent="ButtonStyle">
+        <item name="android:background">@drawable/button_back_green</item>
+    </style>
+
+    <style name="ButtonStyleRed" parent="ButtonStyle">
+        <item name="android:background">@drawable/button_back_red</item>
+    </style>
+
+    <style name="TextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="TicketInputStyle">
+        <item name="android:width">200dp</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="CatButtonStyle">
+        <item name="android:background">@drawable/category_button_back</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:height">100dp</item>
+        <item name="android:width">100dp</item>
+        <item name="android:layout_margin">4dp</item>
+    </style>
+
 </resources>
