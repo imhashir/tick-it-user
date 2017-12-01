@@ -1,151 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center">
-
-    <TextView
-        android:id="@+id/id_text_price"
-        android:layout_width="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        style="@style/TextStyle"
-        android:text="Price"
-        app:layout_constraintBottom_toBottomOf="@+id/id_input_price"
-        app:layout_constraintEnd_toStartOf="@+id/id_input_price"
-        app:layout_constraintTop_toTopOf="@+id/id_input_price"
-        android:layout_marginRight="8dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/id_input_price"
-        style="@style/TicketInputStyle"
-        android:layout_height="wrap_content"
-        android:layout_width="200dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Price"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:layout_marginRight="8dp"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/id_text_seats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        style="@style/TextStyle"
-        android:text="Seats"
-        app:layout_constraintBottom_toBottomOf="@+id/id_input_seats"
-        app:layout_constraintEnd_toStartOf="@+id/id_input_seats"
-        app:layout_constraintTop_toTopOf="@+id/id_input_seats"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_text_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                style="@style/TextStyle"
+                android:text="Price"
+                app:layout_constraintBottom_toBottomOf="@+id/id_input_price"
+                app:layout_constraintEnd_toStartOf="@+id/id_input_price"
+                app:layout_constraintTop_toTopOf="@+id/id_input_price"
+                android:layout_marginRight="8dp"/>
 
-    <TextView
-        android:id="@+id/id_input_seats"
-        style="@style/TicketInputStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Seats"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input_price"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_input_price"
+                style="@style/TicketInputStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="Price"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                android:layout_marginRight="8dp"/>
 
-    <TextView
-        android:id="@+id/id_text_place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        style="@style/TextStyle"
-        android:text="Place"
-        app:layout_constraintBottom_toBottomOf="@+id/id_input_place"
-        app:layout_constraintEnd_toStartOf="@+id/id_input_place"
-        app:layout_constraintTop_toTopOf="@+id/id_input_place"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_text_seats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                style="@style/TextStyle"
+                android:text="Seats"
+                app:layout_constraintBottom_toBottomOf="@+id/id_input_seats"
+                app:layout_constraintEnd_toStartOf="@+id/id_input_seats"
+                app:layout_constraintTop_toTopOf="@+id/id_input_seats"
+                android:layout_marginRight="8dp"/>
 
-    <TextView
-        android:id="@+id/id_text_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        style="@style/TextStyle"
-        android:text="Date Time"
-        app:layout_constraintBottom_toBottomOf="@+id/id_input_date"
-        app:layout_constraintEnd_toStartOf="@+id/id_input_date"
-        app:layout_constraintTop_toTopOf="@+id/id_input_date"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_input_seats"
+                style="@style/TicketInputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="Seats"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_input_price"
+                android:layout_marginRight="8dp"/>
 
-    <TextView
-        android:id="@+id/id_input_place"
-        style="@style/TicketInputStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Place"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input_seats"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_text_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                style="@style/TextStyle"
+                android:text="Place"
+                app:layout_constraintBottom_toBottomOf="@+id/id_input_place"
+                app:layout_constraintEnd_toStartOf="@+id/id_input_place"
+                app:layout_constraintTop_toTopOf="@+id/id_input_place"
+                android:layout_marginRight="8dp"/>
 
-    <TextView
-        android:id="@+id/id_input_date"
-        style="@style/TicketInputStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Date Time"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input_place"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                style="@style/TextStyle"
+                android:text="Date Time"
+                app:layout_constraintBottom_toBottomOf="@+id/id_input_date"
+                app:layout_constraintEnd_toStartOf="@+id/id_input_date"
+                app:layout_constraintTop_toTopOf="@+id/id_input_date"
+                android:layout_marginRight="8dp"/>
 
-    <FrameLayout
-        android:id="@+id/id_ticket_details"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input_date"/>
+            <TextView
+                android:id="@+id/id_input_place"
+                style="@style/TicketInputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="Place"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_input_seats"
+                android:layout_marginRight="8dp"/>
 
-    <EditText
-        android:id="@+id/id_ticket_quantity"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Quantity"
-        app:layout_constraintEnd_toStartOf="@+id/id_buy_ticket_button"
-        app:layout_constraintTop_toTopOf="@+id/id_buy_ticket_button"
-        android:layout_marginRight="8dp"/>
+            <TextView
+                android:id="@+id/id_input_date"
+                style="@style/TicketInputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="Date Time"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_input_place"
+                android:layout_marginRight="8dp"/>
 
-    <Button
-        android:id="@+id/id_buy_ticket_button"
-        style="@style/ButtonStyleGreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Buy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_ticket_details"/>
+            <FrameLayout
+                android:id="@+id/id_ticket_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_input_date"/>
 
-</android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/id_ticket_quantity"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="Quantity"
+                app:layout_constraintEnd_toStartOf="@+id/id_buy_ticket_button"
+                app:layout_constraintTop_toTopOf="@+id/id_buy_ticket_button"
+                android:layout_marginRight="8dp"/>
+
+            <Button
+                android:id="@+id/id_buy_ticket_button"
+                style="@style/ButtonStyleGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Buy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_ticket_details"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/id_buy_ticket_button">
+
+                <RatingBar
+                    android:id="@+id/id_rating_ticket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:numStars="5"
+                    android:padding="0dp"
+                    android:paddingBottom="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:stepSize="1"/>
+
+                <EditText
+                    android:id="@+id/id_comment_ticket"
+                    android:layout_width="273dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingTop="20dp"
+                    android:hint="Comment"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColorLink="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="18sp"/>
+
+
+                <Button
+                    android:id="@+id/id_button_review"
+                    style="@style/ButtonStyleGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center"
+                    android:text="Review"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/id_my_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>
