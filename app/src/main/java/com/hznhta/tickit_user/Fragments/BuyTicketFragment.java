@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -62,6 +64,9 @@ public class BuyTicketFragment extends Fragment {
 
     private ReviewAdapter mAdapter;
 
+    private AlertDialog mBuyLoadingDialog;
+    private AlertDialog mReviewLoadingDialog;
+
     private TicketController mTicketController;
 
     private static final String KEY_TICKET = "BuyTicketFragment.ticket";
@@ -97,6 +102,11 @@ public class BuyTicketFragment extends Fragment {
         mReviewsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mReviewsList.setAdapter(mAdapter);
 
+        mBuyLoadingDialog = new AlertDialog.Builder(getActivity())
+                .setView(new ProgressBar(getActivity())).setTitle("Buying Ticket...").create();
+        mReviewLoadingDialog = new AlertDialog.Builder(getActivity())
+                .setView(new ProgressBar(getActivity())).setTitle("Posting Review...").create();
+
         if(getArguments() != null) {
             mTicket = (Ticket) getArguments().getSerializable(KEY_TICKET);
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTicket.getName());
@@ -128,12 +138,14 @@ public class BuyTicketFragment extends Fragment {
             mBuyTicketButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mBuyLoadingDialog.show();
                     int quantity = Integer.parseInt(mTicketQuantity.getText().toString());
                     if(quantity <= mTicket.getSeats()) {
                         Buy buy = new Buy(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mTicket.getUid(), quantity);
                         mTicketController.buyTicket(buy, mTicket, mType, new OnActionCompletedListener() {
                             @Override
                             public void onActionSucceed() {
+                                mBuyLoadingDialog.dismiss();
                                 Snackbar.make(BuyTicketFragment.this.getView(), "Ticket Bought!", Snackbar.LENGTH_LONG).show();
                             }
 
@@ -151,10 +163,12 @@ public class BuyTicketFragment extends Fragment {
             mReviewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mReviewLoadingDialog.show();
                     ReviewRating review = new ReviewRating(FirebaseAuth.getInstance().getCurrentUser().getUid(), (int) mTicketRating.getRating(), mTicketReview.getText().toString());
                     mTicketController.postTicketReview(review, mTicket, new OnActionCompletedListener() {
                         @Override
                         public void onActionSucceed() {
+                            mReviewLoadingDialog.dismiss();
                             mTicketReview.setText("");
                             mTicketRating.setRating(0);
                             Snackbar.make(BuyTicketFragment.this.getView(), "Review posted!", Snackbar.LENGTH_LONG).show();

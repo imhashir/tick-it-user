@@ -35,6 +35,7 @@ public class TicketController {
 
     public interface OnTicketsRetrievedListener {
         void onTicketsRetrieved(Ticket ticket);
+        void onNoTicketsRetrieved();
     }
 
     public interface OnReviewRetrievedListener {
@@ -87,6 +88,18 @@ public class TicketController {
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        mDatabase.getReference("tickets").child(types[type]).orderByKey().limitToFirst(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() == 0)
+                    mOnTicketsRetrievedListener.onNoTicketsRetrieved();
             }
 
             @Override

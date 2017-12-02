@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hznhta.tickit_user.Activities.BuyTicketActivity;
@@ -27,7 +28,10 @@ public class TicketListFragment extends Fragment {
     private static final String TYPE_ARG = "TicketListFragment.type";
     private static final String TAG = "TicketListFragment";
 
-    @BindView(R.id.id_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.id_recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.id_progress_bar)
+    ProgressBar mProgressBar;
 
     private TicketAdapter mAdapter;
 
@@ -55,8 +59,16 @@ public class TicketListFragment extends Fragment {
         TicketController.newInstance().getTicketsList(mType, new TicketController.OnTicketsRetrievedListener() {
             @Override
             public void onTicketsRetrieved(Ticket ticket) {
+                if(mProgressBar.getVisibility() == View.VISIBLE)
+                    mProgressBar.setVisibility(View.GONE);
                 mAdapter.addTicket(ticket);
                 mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNoTicketsRetrieved() {
+                if(mProgressBar.getVisibility() == View.VISIBLE)
+                    mProgressBar.setVisibility(View.GONE);
             }
         });
         return v;
