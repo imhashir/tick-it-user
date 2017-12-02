@@ -111,18 +111,34 @@ public class TicketController {
 
     public void buyTicket(final Buy buy, final Ticket ticket, final int type, OnActionCompletedListener listener) {
         mOnActionCompletedListener = listener;
-        mDatabase.getReference("buy").push().setValue(buy).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.getReference("userCreditAccounts").child(mCurrentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
-                    mDatabase.getReference("tickets").child(types[type]).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final Long accountBalance = ((Long) dataSnapshot.getValue());
+                final int totalBill = ticket.getPrice()*buy.getCount();
+                if(accountBalance > totalBill) {
+                    mDatabase.getReference("buy").push().setValue(buy).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                mDatabase.getReference("userTickets").child(mCurrentUserId).child(ticket.getUid()).setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                mDatabase.getReference("tickets").child(types[type]).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        mOnActionCompletedListener.onActionSucceed();
+                                        if(task.isSuccessful()) {
+                                            mDatabase.getReference("userTickets").child(mCurrentUserId).child(ticket.getUid()).setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    mDatabase.getReference("userCreditAccounts").child(mCurrentUserId).setValue(accountBalance - totalBill).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            mOnActionCompletedListener.onActionSucceed();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            mOnActionCompletedListener.onActionFailed(task.getException().toString());
+                                        }
                                     }
                                 });
                             } else {
@@ -131,8 +147,13 @@ public class TicketController {
                         }
                     });
                 } else {
-                    mOnActionCompletedListener.onActionFailed(task.getException().toString());
+                    mOnActionCompletedListener.onActionFailed("Not enough credit in account");
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

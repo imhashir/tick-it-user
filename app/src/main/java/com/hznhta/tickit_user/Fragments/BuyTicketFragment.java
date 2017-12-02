@@ -138,9 +138,9 @@ public class BuyTicketFragment extends Fragment {
             mBuyTicketButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mBuyLoadingDialog.show();
                     int quantity = Integer.parseInt(mTicketQuantity.getText().toString());
                     if(quantity <= mTicket.getSeats()) {
+                        mBuyLoadingDialog.show();
                         Buy buy = new Buy(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mTicket.getUid(), quantity);
                         mTicketController.buyTicket(buy, mTicket, mType, new OnActionCompletedListener() {
                             @Override
@@ -151,10 +151,12 @@ public class BuyTicketFragment extends Fragment {
 
                             @Override
                             public void onActionFailed(String err) {
-
+                                mBuyLoadingDialog.dismiss();
+                                Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
                             }
                         });
                     } else {
+                        mBuyLoadingDialog.dismiss();
                         mTicketQuantity.setError("Not enough Tickets available!");
                     }
                 }
@@ -176,6 +178,7 @@ public class BuyTicketFragment extends Fragment {
 
                         @Override
                         public void onActionFailed(String err) {
+                            mReviewLoadingDialog.dismiss();
                             Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
                         }
                     });
