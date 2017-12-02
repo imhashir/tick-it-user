@@ -26,6 +26,7 @@ public class TicketController {
 
     private OnTicketsRetrievedListener mOnTicketsRetrievedListener;
     private OnActionCompletedListener mOnActionCompletedListener;
+    private OnReviewRetrievedListener mOnReviewRetrievedListener;
 
     private FirebaseDatabase mDatabase;
     private String mCurrentUserId;
@@ -34,6 +35,10 @@ public class TicketController {
 
     public interface OnTicketsRetrievedListener {
         void onTicketsRetrieved(Ticket ticket);
+    }
+
+    public interface OnReviewRetrievedListener {
+        void onReviewRetrieved(ReviewRating review, String username);
     }
 
     public TicketController() {
@@ -125,7 +130,7 @@ public class TicketController {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null) {
-                    mDatabase.getReference("review").child(review.getUserId()).child(ticket.getUid()).setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabase.getReference("review").child(ticket.getUid()).child(review.getUserId()).setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful())
@@ -148,4 +153,44 @@ public class TicketController {
         });
     }
 
+    public void fetchTicketReviews(Ticket ticket, OnReviewRetrievedListener listener) {
+        mOnReviewRetrievedListener = listener;
+        FirebaseDatabase.getInstance().getReference("review").child(ticket.getUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                final ReviewRating review = dataSnapshot.getValue(ReviewRating.class);
+                mDatabase.getReference("users").child(review.getUserId()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mOnReviewRetrievedListener.onReviewRetrieved(review, dataSnapshot.getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

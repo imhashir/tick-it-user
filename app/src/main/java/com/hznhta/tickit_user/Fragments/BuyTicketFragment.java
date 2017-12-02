@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,9 @@ import com.hznhta.tickit_user.Models.SportsTicket;
 import com.hznhta.tickit_user.Models.Ticket;
 import com.hznhta.tickit_user.Models.TransportTicket;
 import com.hznhta.tickit_user.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +57,10 @@ public class BuyTicketFragment extends Fragment {
     RatingBar mTicketRating;
     @BindView(R.id.id_review_ticket)
     EditText mTicketReview;
+    @BindView(R.id.id_reviews_list)
+    RecyclerView mReviewsList;
 
+    private ReviewAdapter mAdapter;
 
     private TicketController mTicketController;
 
@@ -85,6 +93,9 @@ public class BuyTicketFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_ticket_all, container, false);
         ButterKnife.bind(this, v);
+        mAdapter = new ReviewAdapter();
+        mReviewsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mReviewsList.setAdapter(mAdapter);
 
         if(getArguments() != null) {
             mTicket = (Ticket) getArguments().getSerializable(KEY_TICKET);
@@ -156,10 +167,74 @@ public class BuyTicketFragment extends Fragment {
                     });
                 }
             });
+
+            mTicketController.fetchTicketReviews(mTicket, new TicketController.OnReviewRetrievedListener() {
+                @Override
+                public void onReviewRetrieved(ReviewRating review, String username) {
+                    mAdapter.addReview(review, username);
+                }
+            });
         } else {
             Snackbar.make(BuyTicketFragment.this.getView(), "Unable to load ticket data!", Snackbar.LENGTH_LONG).show();
         }
 
         return v;
+    }
+
+    private class ReviewAdapter extends RecyclerView.Adapter<CommentHolder>
+    {
+        private List<ReviewRating> mReviewList;
+        private List<String> mUserNameList;
+
+        public ReviewAdapter() {
+            mReviewList = new ArrayList<>();
+            mUserNameList = new ArrayList<>();
+        }
+
+        @Override
+        public CommentHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.single_ticket_review, viewGroup,false);
+            ButterKnife.bind(this, v);
+            return new CommentHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(CommentHolder commentHolder, int i) {
+            commentHolder.bindView(mReviewList.get(i), mUserNameList.get(i));
+        }
+
+        public void addReview(ReviewRating obj, String username) {
+            mReviewList.add(obj);
+            mUserNameList.add(username);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return mReviewList.size();
+        }
+    }
+
+
+    private class CommentHolder extends RecyclerView.ViewHolder {
+
+        private ReviewRating mReviewRating;
+        private TextView mUserName;
+        private RatingBar mUserRating;
+        private TextView mUserReview;
+
+        public CommentHolder(View itemView) {
+            super(itemView);
+            mUserName = itemView.findViewById(R.id.id_user_name);
+            mUserRating = itemView.findViewById(R.id.id_rating_user);
+            mUserReview = itemView.findViewById(R.id.id_user_review);
+        }
+
+        public void bindView(ReviewRating reviewRating, String username) {
+            mReviewRating = reviewRating;
+            mUserRating.setRating(mReviewRating.getRating());
+            mUserReview.setText(mReviewRating.getReview());
+            mUserName.setText(username);
+        }
     }
 }
