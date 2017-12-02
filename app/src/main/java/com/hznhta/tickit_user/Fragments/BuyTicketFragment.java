@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,7 @@ import com.hznhta.tickit_user.Controllers.TicketController;
 import com.hznhta.tickit_user.Interfaces.OnActionCompletedListener;
 import com.hznhta.tickit_user.Models.Buy;
 import com.hznhta.tickit_user.Models.MovieTicket;
+import com.hznhta.tickit_user.Models.ReviewRating;
 import com.hznhta.tickit_user.Models.ShowTicket;
 import com.hznhta.tickit_user.Models.SportsTicket;
 import com.hznhta.tickit_user.Models.Ticket;
@@ -44,6 +46,13 @@ public class BuyTicketFragment extends Fragment {
     TextView mTicketSeats;
     @BindView(R.id.id_input_place)
     TextView mTicketPlace;
+    @BindView(R.id.id_button_review)
+    Button mReviewButton;
+    @BindView(R.id.id_rating_ticket)
+    RatingBar mTicketRating;
+    @BindView(R.id.id_review_ticket)
+    EditText mTicketReview;
+
 
     private TicketController mTicketController;
 
@@ -127,6 +136,28 @@ public class BuyTicketFragment extends Fragment {
                     }
                 }
             });
+
+            mReviewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ReviewRating review = new ReviewRating(FirebaseAuth.getInstance().getCurrentUser().getUid(), (int) mTicketRating.getRating(), mTicketReview.getText().toString());
+                    mTicketController.postTicketReview(review, mTicket, new OnActionCompletedListener() {
+                        @Override
+                        public void onActionSucceed() {
+                            mTicketReview.setText("");
+                            mTicketRating.setRating(0);
+                            Snackbar.make(BuyTicketFragment.this.getView(), "Review posted!", Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onActionFailed(String err) {
+                            Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+        } else {
+            Snackbar.make(BuyTicketFragment.this.getView(), "Unable to load ticket data!", Snackbar.LENGTH_LONG).show();
         }
 
         return v;

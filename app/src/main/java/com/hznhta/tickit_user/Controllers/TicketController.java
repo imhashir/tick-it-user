@@ -1,6 +1,7 @@
 package com.hznhta.tickit_user.Controllers;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -9,9 +10,11 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hznhta.tickit_user.Interfaces.OnActionCompletedListener;
 import com.hznhta.tickit_user.Models.Buy;
 import com.hznhta.tickit_user.Models.MovieTicket;
+import com.hznhta.tickit_user.Models.ReviewRating;
 import com.hznhta.tickit_user.Models.ShowTicket;
 import com.hznhta.tickit_user.Models.SportsTicket;
 import com.hznhta.tickit_user.Models.Ticket;
@@ -24,8 +27,18 @@ public class TicketController {
     private OnTicketsRetrievedListener mOnTicketsRetrievedListener;
     private OnActionCompletedListener mOnActionCompletedListener;
 
+    private FirebaseDatabase mDatabase;
+    private String mCurrentUserId;
+
+    private static final String TAG = "TicketController";
+
     public interface OnTicketsRetrievedListener {
         void onTicketsRetrieved(Ticket ticket);
+    }
+
+    public TicketController() {
+        mDatabase = FirebaseDatabase.getInstance();
+        mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public static TicketController newInstance() {
@@ -34,7 +47,7 @@ public class TicketController {
 
     public void getTicketsList(final int type, OnTicketsRetrievedListener listener) {
         mOnTicketsRetrievedListener = listener;
-        FirebaseDatabase.getInstance().getReference("tickets").child(types[type]).addChildEventListener(new ChildEventListener() {
+        mDatabase.getReference("tickets").child(types[type]).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Ticket ticket = null;
@@ -80,15 +93,15 @@ public class TicketController {
 
     public void buyTicket(final Buy buy, final Ticket ticket, final int type, OnActionCompletedListener listener) {
         mOnActionCompletedListener = listener;
-        FirebaseDatabase.getInstance().getReference("buy").push().setValue(buy).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.getReference("buy").push().setValue(buy).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
-                    FirebaseDatabase.getInstance().getReference("tickets").child(types[type]).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabase.getReference("tickets").child(types[type]).child(ticket.getUid()).child("seats").setValue(ticket.getSeats() - buy.getCount()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                FirebaseDatabase.getInstance().getReference("userTickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ticket.getUid()).setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                mDatabase.getReference("userTickets").child(mCurrentUserId).child(ticket.getUid()).setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         mOnActionCompletedListener.onActionSucceed();
@@ -102,6 +115,35 @@ public class TicketController {
                 } else {
                     mOnActionCompletedListener.onActionFailed(task.getException().toString());
                 }
+            }
+        });
+    }
+
+    public void postTicketReview(final ReviewRating review, final Ticket ticket, OnActionCompletedListener listener) {
+        mOnActionCompletedListener = listener;
+        mDatabase.getReference("userTickets").child(mCurrentUserId).child(ticket.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null) {
+                    mDatabase.getReference("review").child(review.getUserId()).child(ticket.getUid()).setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful())
+                                mOnActionCompletedListener.onActionSucceed();
+                            else {
+                                mOnActionCompletedListener.onActionFailed("Failed to post Review!");
+                                Log.wtf(TAG, task.getException());
+                            }
+                        }
+                    });
+                } else {
+                    mOnActionCompletedListener.onActionFailed("Ticket not bought!");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

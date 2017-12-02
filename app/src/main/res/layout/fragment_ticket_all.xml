@@ -181,12 +181,12 @@
                     android:stepSize="1"/>
 
                 <EditText
-                    android:id="@+id/id_comment_ticket"
+                    android:id="@+id/id_review_ticket"
                     android:layout_width="273dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:paddingTop="20dp"
-                    android:hint="Comment"
+                    android:hint="Review"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColorLink="@color/common_google_signin_btn_text_dark_focused"
                     android:textSize="18sp"/>
