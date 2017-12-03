@@ -183,15 +183,14 @@
 
                 <EditText
                     android:id="@+id/id_review_ticket"
-                    android:layout_width="273dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:paddingTop="20dp"
+                    android:inputType="textMultiLine"
                     android:hint="Review"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColorLink="@color/common_google_signin_btn_text_dark_focused"
+                    android:textAlignment="center"
                     android:textSize="18sp"/>
-
 
                 <Button
                     android:id="@+id/id_button_review"
