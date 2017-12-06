@@ -3,5 +3,6 @@
     <string name="no_internet_message">Enable WIFI and press OK</string>
     <string name="no_internet_title">No Internet Access</string>
     <string name="activity_label_request_credit">Request Credit</string>
+    <string name="error_empty_fields">One or more fields are empty</string>
 
 </resources>

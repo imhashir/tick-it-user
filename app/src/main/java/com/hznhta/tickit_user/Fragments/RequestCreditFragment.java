@@ -45,21 +45,25 @@ public class RequestCreditFragment extends Fragment {
         mRequestCreditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRequestProgressDialog.show();
-                RequestCreditController.newInstance().requestCredit(Integer.parseInt(mAmountCredit.getText().toString()), new OnActionCompletedListener() {
-                    @Override
-                    public void onActionSucceed() {
-                        mRequestProgressDialog.dismiss();
-                        mAmountCredit.setText("");
-                        Snackbar.make(RequestCreditFragment.this.getView(), "Credit Request Sent!", Snackbar.LENGTH_LONG).show();
-                    }
+                if(mAmountCredit.getText().length() > 0) {
+                    mRequestProgressDialog.show();
+                    RequestCreditController.newInstance().requestCredit(Integer.parseInt(mAmountCredit.getText().toString()), new OnActionCompletedListener() {
+                        @Override
+                        public void onActionSucceed() {
+                            mRequestProgressDialog.dismiss();
+                            mAmountCredit.setText("");
+                            Snackbar.make(RequestCreditFragment.this.getView(), "Credit Request Sent!", Snackbar.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onActionFailed(String err) {
-                        mRequestProgressDialog.dismiss();
-                        Snackbar.make(RequestCreditFragment.this.getView(), "Unable to send Credit Request!", Snackbar.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onActionFailed(String err) {
+                            mRequestProgressDialog.dismiss();
+                            Snackbar.make(RequestCreditFragment.this.getView(), "Unable to send Credit Request!", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Snackbar.make(getActivity().getCurrentFocus(), R.string.error_empty_fields, Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         return v;

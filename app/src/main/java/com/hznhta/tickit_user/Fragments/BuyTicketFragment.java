@@ -138,26 +138,34 @@ public class BuyTicketFragment extends Fragment {
             mBuyTicketButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int quantity = Integer.parseInt(mTicketQuantity.getText().toString());
-                    if(quantity <= mTicket.getSeats()) {
-                        mBuyLoadingDialog.show();
-                        Buy buy = new Buy(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mTicket.getUid(), quantity);
-                        mTicketController.buyTicket(buy, mTicket, mType, new OnActionCompletedListener() {
-                            @Override
-                            public void onActionSucceed() {
-                                mBuyLoadingDialog.dismiss();
-                                Snackbar.make(BuyTicketFragment.this.getView(), "Ticket Bought!", Snackbar.LENGTH_LONG).show();
-                            }
+                    if(mTicketQuantity.getText().length() > 0) {
+                        int quantity = Integer.parseInt(mTicketQuantity.getText().toString());
+                        if (quantity > 0) {
+                            if (quantity <= mTicket.getSeats()) {
+                                mBuyLoadingDialog.show();
+                                Buy buy = new Buy(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mTicket.getUid(), quantity);
+                                mTicketController.buyTicket(buy, mTicket, mType, new OnActionCompletedListener() {
+                                    @Override
+                                    public void onActionSucceed() {
+                                        mBuyLoadingDialog.dismiss();
+                                        Snackbar.make(BuyTicketFragment.this.getView(), "Ticket Bought!", Snackbar.LENGTH_LONG).show();
+                                    }
 
-                            @Override
-                            public void onActionFailed(String err) {
+                                    @Override
+                                    public void onActionFailed(String err) {
+                                        mBuyLoadingDialog.dismiss();
+                                        Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
                                 mBuyLoadingDialog.dismiss();
-                                Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
+                                mTicketQuantity.setError("Not enough Tickets available!");
                             }
-                        });
+                        } else {
+                            Snackbar.make(getActivity().getCurrentFocus(), "You must buy at-least 1 ticket", Snackbar.LENGTH_LONG).show();
+                        }
                     } else {
-                        mBuyLoadingDialog.dismiss();
-                        mTicketQuantity.setError("Not enough Tickets available!");
+                        Snackbar.make(getActivity().getCurrentFocus(), R.string.error_empty_fields, Snackbar.LENGTH_LONG).show();
                     }
                 }
             });
@@ -165,23 +173,27 @@ public class BuyTicketFragment extends Fragment {
             mReviewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mReviewLoadingDialog.show();
-                    ReviewRating review = new ReviewRating(FirebaseAuth.getInstance().getCurrentUser().getUid(), (int) mTicketRating.getRating(), mTicketReview.getText().toString());
-                    mTicketController.postTicketReview(review, mTicket, new OnActionCompletedListener() {
-                        @Override
-                        public void onActionSucceed() {
-                            mReviewLoadingDialog.dismiss();
-                            mTicketReview.setText("");
-                            mTicketRating.setRating(0);
-                            Snackbar.make(BuyTicketFragment.this.getView(), "Review posted!", Snackbar.LENGTH_LONG).show();
-                        }
+                    if(mTicketRating.getRating() > 0 && mTicketReview.getText().length() > 0) {
+                        mReviewLoadingDialog.show();
+                        ReviewRating review = new ReviewRating(FirebaseAuth.getInstance().getCurrentUser().getUid(), (int) mTicketRating.getRating(), mTicketReview.getText().toString());
+                        mTicketController.postTicketReview(review, mTicket, new OnActionCompletedListener() {
+                            @Override
+                            public void onActionSucceed() {
+                                mReviewLoadingDialog.dismiss();
+                                mTicketReview.setText("");
+                                mTicketRating.setRating(0);
+                                Snackbar.make(BuyTicketFragment.this.getView(), "Review posted!", Snackbar.LENGTH_LONG).show();
+                            }
 
-                        @Override
-                        public void onActionFailed(String err) {
-                            mReviewLoadingDialog.dismiss();
-                            Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
-                        }
-                    });
+                            @Override
+                            public void onActionFailed(String err) {
+                                mReviewLoadingDialog.dismiss();
+                                Snackbar.make(BuyTicketFragment.this.getView(), err, Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Snackbar.make(getActivity().getCurrentFocus(), R.string.error_empty_fields, Snackbar.LENGTH_LONG).show();
+                    }
                 }
             });
 
